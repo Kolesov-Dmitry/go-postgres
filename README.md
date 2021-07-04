@@ -1,2 +1,2 @@
 # go-postgres
-homework for golang postgres course
+Homework for golang postgres course
