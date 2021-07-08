@@ -1,0 +1,38 @@
+                 tablename                  |  bytes   | count
+--------------------------------------------+-----------------
+ auth.users                                 |   40960  |   2  
+ auth.users_roles                           |   24576  |   2
+ auth.roles                                 |   40960  |   2
+ blog.articles                              |   49152  |   2
+ blog.articles_tags                         |   24576  |   2
+ blog.tags                                  |   40960  |   3
+
+
+Total pgdata size:
+
+4.0K    /var/lib/postgresql/data/PG_VERSION
+31.0M   /var/lib/postgresql/data/base
+568.0K  /var/lib/postgresql/data/global
+4.0K    /var/lib/postgresql/data/pg_commit_ts
+4.0K    /var/lib/postgresql/data/pg_dynshmem
+8.0K    /var/lib/postgresql/data/pg_hba.conf
+4.0K    /var/lib/postgresql/data/pg_ident.conf
+16.0K   /var/lib/postgresql/data/pg_logical
+28.0K   /var/lib/postgresql/data/pg_multixact
+4.0K    /var/lib/postgresql/data/pg_notify
+4.0K    /var/lib/postgresql/data/pg_replslot
+4.0K    /var/lib/postgresql/data/pg_serial
+4.0K    /var/lib/postgresql/data/pg_snapshots
+4.0K    /var/lib/postgresql/data/pg_stat
+40.0K   /var/lib/postgresql/data/pg_stat_tmp
+12.0K   /var/lib/postgresql/data/pg_subtrans
+4.0K    /var/lib/postgresql/data/pg_tblspc
+4.0K    /var/lib/postgresql/data/pg_twophase
+16.0M   /var/lib/postgresql/data/pg_wal
+12.0K   /var/lib/postgresql/data/pg_xact
+4.0K    /var/lib/postgresql/data/postgresql.auto.conf
+28.0K   /var/lib/postgresql/data/postgresql.conf
+4.0K    /var/lib/postgresql/data/postmaster.opts
+4.0K    /var/lib/postgresql/data/postmaster.pid
+--------------------------------------------------------
+47.8M
