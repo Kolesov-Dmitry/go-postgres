@@ -50,6 +50,8 @@ CREATE TABLE IF NOT EXISTS blog.articles (
     CONSTRAINT articles_fk_author_id FOREIGN KEY (author_id) REFERENCES auth.users(id)
 );
 
+CREATE INDEX articles_edited_idx ON blog.articles (edited_at, deleted_at);
+
 CREATE TABLE IF NOT EXISTS blog.tags (
     id       BIGSERIAL NOT NULL,
     tag_name VARCHAR(30) UNIQUE,

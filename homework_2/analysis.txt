@@ -1,0 +1,37 @@
+ Schema |        Name          | Type  |  Owner   |    Table      | Persistence | Size  | Description
+--------+----------------------+-------+----------+---------------+-------------+-------+-------------
+ auth   | users_email_key      | index | postgres | users         | permanent   | 16 kB | 
+ blog   | articles_edited_idx  | index | postgres | articles      | permanent   | 16 kB |
+ 
+
+1. 
+Запрос статей до индекса
+
+Limit  (cost=21.14..21.14 rows=1 width=602)
+  ->  Sort  (cost=21.14..21.14 rows=1 width=602)
+        Sort Key: a.edited_at DESC
+        ->  Nested Loop  (cost=0.14..21.13 rows=1 width=602)
+              ->  Seq Scan on articles a  (cost=0.00..12.85 rows=1 width=374)
+                    Filter: ((deleted_at IS NULL) AND (edited_at < to_timestamp('13.07.2021 00:00'::text, 'DD.MM.YYYY H24:MI'::text)))
+              ->  Index Scan using users_pkey on users u  (cost=0.14..8.16 rows=1 width=244)
+                    Index Cond: (id = a.author_id)
+
+Запрос статей по индексу
+
+Limit  (cost=0.29..17.06 rows=1 width=602)
+  ->  Nested Loop  (cost=0.29..17.06 rows=1 width=602)
+        ->  Index Scan Backward using articles_edited_idx on articles a  (cost=0.15..8.79 rows=1 width=374)
+              Index Cond: ((edited_at < to_timestamp('13.07.2021 00:00'::text, 'DD.MM.YYYY H24:MI'::text)) AND (deleted_at IS NULL))
+        ->  Index Scan using users_pkey on users u  (cost=0.14..8.16 rows=1 width=244)
+              Index Cond: (id = a.author_id)
+
+2.
+Запрос пользователя до индекса
+
+Seq Scan on users  (cost=0.00..11.75 rows=1 width=532)
+  Filter: ((email)::text = 'some@email.org'::text)
+
+Запрос пользователя по индексу
+
+Index Scan using users_email_key on users  (cost=0.14..8.16 rows=1 width=532)
+  Index Cond: ((email)::text = 'some@email.org'::text)
