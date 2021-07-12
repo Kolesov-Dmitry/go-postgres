@@ -1,0 +1,170 @@
+-- create table
+CREATE TABLE IF NOT EXISTS users (
+    id         BIGSERIAL NOT NULL,
+    first_name VARCHAR(50) NOT NULL,
+    last_name  VARCHAR(50) NOT NULL,
+    email      VARCHAR(50) NOT NULL,
+    pwd        VARCHAR(72) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT 'now()',
+    PRIMARY KEY (id)
+);
+
+-- insert test users
+INSERT INTO users (first_name, last_name, email, pwd) VALUES
+    ('first',  'user', 'first@email.org',  '123'),
+    ('second', 'user', 'second@email.org', '456'),
+    ('third',  'user', 'third@email.org',  '789');
+
+
+-- Результат команды \d
+
+Таблица "auth.roles"
+Столбец  |          Тип          | Правило сортировки | Допустимость NULL |              По умолчанию
+-----------+-----------------------+--------------------+-------------------+----------------------------------------
+id        | bigint                |                    | not null          | nextval('auth.roles_id_seq'::regclass)
+role_name | character varying(15) |                    |                   |
+Индексы:
+"roles_pkey" PRIMARY KEY, btree (id)
+Ссылки извне:
+TABLE "auth.users_roles" CONSTRAINT "user_roles_fk_role_id" FOREIGN KEY (role_id) REFERENCES auth.roles(id)
+
+
+Последовательность "auth.roles_id_seq"
+
+Тип    | Начальное_значение | Минимум |      Максимум       | Шаг | Зацикливается? | Кешируется
+--------+--------------------+---------+---------------------+-----+----------------+------------
+bigint |                  1 |       1 | 9223372036854775807 |   1 | no             |          1
+Владелец: auth.roles.id
+
+
+Индекс "auth.roles_pkey"
+Столбец |  Тип   | Определение
+---------+--------+-------------
+id      | bigint | id
+первичный ключ, btree, для таблицы "auth.roles"
+
+
+                 Таблица "auth.users"
+Столбец   |             Тип             | Правило сортировки | Допустимость NULL |                       По умолчанию
+------------+-----------------------------+--------------------+-------------------+-----------------------------------------------------------
+id         | bigint                      |                    | not null          | nextval('auth.users_id_seq'::regclass)
+first_name | character varying(50)       |                    | not null          |
+last_name  | character varying(50)       |                    | not null          |
+email      | character varying(50)       |                    | not null          |
+pwd        | character varying(72)       |                    | not null          |
+created_at | timestamp without time zone |                    | not null          | '2021-07-07 11:03:03.519186'::timestamp without time zone
+Индексы:
+"users_pkey" PRIMARY KEY, btree (id)
+Ссылки извне:
+TABLE "blog.articles" CONSTRAINT "articles_fk_author_id" FOREIGN KEY (author_id) REFERENCES auth.users(id)
+TABLE "auth.users_roles" CONSTRAINT "user_roles_fk_user_id" FOREIGN KEY (user_id) REFERENCES auth.users(id)
+
+
+Последовательность "auth.users_id_seq"
+Тип   | Начальное_значение | Минимум |      Максимум       | Шаг | Зацикливается? | Кешируется
+--------+--------------------+---------+---------------------+-----+----------------+------------
+bigint |                  1 |       1 | 9223372036854775807 |   1 | no             |          1
+Владелец: auth.users.id
+
+
+Индекс "auth.users_pkey"
+Столбец |  Тип   | Определение
+---------+--------+-------------
+id      | bigint | id
+первичный ключ, btree, для таблицы "auth.users"
+
+
+Таблица "auth.users_roles"
+Столбец |  Тип   | Правило сортировки | Допустимость NULL | По умолчанию
+---------+--------+--------------------+-------------------+--------------
+user_id | bigint |                    | not null          |
+role_id | bigint |                    | not null          |
+Индексы:
+"users_roles_pkey" PRIMARY KEY, btree (user_id, role_id)
+Ограничения внешнего ключа:
+"user_roles_fk_role_id" FOREIGN KEY (role_id) REFERENCES auth.roles(id)
+"user_roles_fk_user_id" FOREIGN KEY (user_id) REFERENCES auth.users(id)
+
+
+Индекс "auth.users_roles_pkey"
+Столбец |  Тип   | Определение
+---------+--------+-------------
+user_id | bigint | user_id
+role_id | bigint | role_id
+первичный ключ, btree, для таблицы "auth.users_roles"
+
+                Таблица "blog.articles"
+Столбец    |             Тип             | Правило сортировки | Допустимость NULL |                       По умолчанию
+------------+-----------------------------+--------------------+-------------------+-----------------------------------------------------------
+id         | bigint                      |                    | not null          | nextval('blog.articles_id_seq'::regclass)
+author_id  | bigint                      |                    | not null          |
+caption    | character varying(150)      |                    | not null          |
+content    | text                        |                    |                   |
+created_at | timestamp without time zone |                    | not null          | '2021-07-07 11:03:03.715318'::timestamp without time zone
+edited_at  | timestamp without time zone |                    | not null          | '2021-07-07 11:03:03.715318'::timestamp without time zone
+deleted_at | timestamp without time zone |                    |                   |
+Индексы:
+"articles_pkey" PRIMARY KEY, btree (id)
+Ограничения внешнего ключа:
+"articles_fk_author_id" FOREIGN KEY (author_id) REFERENCES auth.users(id)
+Ссылки извне:
+TABLE "blog.articles_tags" CONSTRAINT "articles_tags_fk_article_id" FOREIGN KEY (article_id) REFERENCES blog.articles(id)
+
+
+Последовательность "blog.articles_id_seq"
+Тип    | Начальное_значение | Минимум |      Максимум       | Шаг | Зацикливается? | Кешируется
+--------+--------------------+---------+---------------------+-----+----------------+------------
+bigint |                  1 |       1 | 9223372036854775807 |   1 | no             |          1
+Владелец: blog.articles.id
+
+
+Индекс "blog.articles_pkey"
+Столбец |  Тип   | Определение
+---------+--------+-------------
+id      | bigint | id
+первичный ключ, btree, для таблицы "blog.articles"
+
+
+Таблица "blog.articles_tags"
+Столбец   |  Тип   | Правило сортировки | Допустимость NULL | По умолчанию
+------------+--------+--------------------+-------------------+--------------
+article_id | bigint |                    | not null          |
+tag_id     | bigint |                    | not null          |
+Индексы:
+"articles_tags_pkey" PRIMARY KEY, btree (article_id, tag_id)
+Ограничения внешнего ключа:
+"articles_tags_fk_article_id" FOREIGN KEY (article_id) REFERENCES blog.articles(id)
+"articles_tags_fk_tag_id" FOREIGN KEY (tag_id) REFERENCES blog.tags(id)
+
+
+Индекс "blog.articles_tags_pkey"
+Столбец   |  Тип   | Определение
+------------+--------+-------------
+article_id | bigint | article_id
+tag_id     | bigint | tag_id
+первичный ключ, btree, для таблицы "blog.articles_tags"
+
+
+    Таблица "blog.tags"
+Столбец  |          Тип          | Правило сортировки | Допустимость NULL |             По умолчанию
+----------+-----------------------+--------------------+-------------------+---------------------------------------
+id       | bigint                |                    | not null          | nextval('blog.tags_id_seq'::regclass)
+tag_name | character varying(30) |                    |                   |
+Индексы:
+"tags_pkey" PRIMARY KEY, btree (id)
+Ссылки извне:
+TABLE "blog.articles_tags" CONSTRAINT "articles_tags_fk_tag_id" FOREIGN KEY (tag_id) REFERENCES blog.tags(id)
+
+
+Последовательность "blog.tags_id_seq"
+Тип   | Начальное_значение | Минимум |      Максимум       | Шаг | Зацикливается? | Кешируется
+--------+--------------------+---------+---------------------+-----+----------------+------------
+bigint |                  1 |       1 | 9223372036854775807 |   1 | no             |          1
+Владелец: blog.tags.id
+
+
+Индекс "blog.tags_pkey"
+Столбец |  Тип   | Определение
+---------+--------+-------------
+id      | bigint | id
+первичный ключ, btree, для таблицы "blog.tags"
