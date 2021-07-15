@@ -111,11 +111,13 @@ func main() {
 	}
 	defer pool.Close()
 
-	// fillDatabase(context.Background(), pool)
+	// fill database with data
+	fillDatabase(context.Background(), pool)
 
 	// start tests
 	res := loadTest(context.Background(), pool, selectUserByEmail)
 
+	// print test results
 	fmt.Println("duration:", res.Duration)
 	fmt.Println("queries:", res.QueriesPerformed)
 
