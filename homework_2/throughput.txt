@@ -1,0 +1,22 @@
+Конфигурация:
+
+Процессор: AMD Rizen 5 2600 (6 ядер по 3.4 ГГц)
+Оперативная память: 2x8ГБ 3200МГц
+SSD 256 Гб
+
+Запрос: SELECT id, first_name, last_name, email, pwd, created_at FROM auth.users WHERE email = 'some@email.org';
+
+Тест 1 (1 min, 2 max):
+  duration: 1m0.0033746s
+  queries:  133341
+  QPS:      2222
+
+Тест 2 (4 min, 8 max):
+  duration: 1m0.0002721s
+  queries:  447390
+  QPS:      7456
+
+Тест 3 (6 min, 12 max):
+  duration: 1m0.0009148s
+  queries:  429181
+  QPS:      7153
